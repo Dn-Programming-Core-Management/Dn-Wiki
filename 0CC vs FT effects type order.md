@@ -1,6 +1,6 @@
 # 0CC vs FT effect type order
 
-0CC for some reason uses a slightly different effects type order within the tracker, but converts to FT 050B+ effects type order when saved to a file.
+0CC for some reason converts to a slightly different effect type order when reading, but converts *back* to FT 050B+ effects type order when saved to a file.
 
 In Dn-FT v.0.5.0.0, this conversion logic was disturbed, resulting in 0CC effects type order not being properly converted back to FT 050B+ when saving. This issue has been fixed in [commit df78460](https://github.com/Dn-Programming-Core-Management/Dn-FamiTracker/commit/df78460aae403daf2bb68891c788248bbc8a8a02).
 

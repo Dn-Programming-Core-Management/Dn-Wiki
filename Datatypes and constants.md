@@ -134,6 +134,8 @@
 
 ## Constants
 
+### Pattern and instrument constants
+
 | *Constant name*      | *Value*                          | Description                                                                                                       |
 | -------------------- | -------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
 | `MAX_INSTRUMENTS`    | int: 64                          | Maximum number of instruments to use                                                                              |
@@ -160,4 +162,3 @@
 | `NOTE_COUNT`         | int: `OCTAVE_RANGE * NOTE_RANGE` | Range of all available notes                                                                                      |
 | `INVALID_INSTRUMENT` | int: -1                          | Index of an invalid instrument. Might collide with `HOLD_INSTRUMENT`?                                             |
 | `MAX_VOLUME`         | int: `0x10`                      | Max allowed value in volume column. The actual meaning is no specific volume information, rather than max volume. |
-
