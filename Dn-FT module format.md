@@ -646,7 +646,6 @@ Block ID: `PATTERNS`
 | char         | 1                                          | ^        | `Instrument`                       | Instrument index                | 0 to `MAX_INSTRUMENTS`  | Instrument indices equal to the hold note index will not be assigned to the pattern. Blank instrument is indicated with value `MAX_INSTRUMENTS` | 1+                         |
 | char         | 1                                          | ^        | `Vol`                              | Channel volume                  | 0 to `MAX_VOLUME`       | Blank volume is indicated with value `MAX_VOLUME`                                                                                               | 1+                         |
 | char[]       | `m_iEffectColumns` of current channel \* 2 | ^        |                                    | Effect data (see section below) |                         | In block versions 1-5, all effect columns were stored even if they are unused.                                                                  | 1+                         |
-|              |                                            |          |                                    |                                 |                         |                                                                                                                                                 |                            |
 
 ##### Effect data
 
