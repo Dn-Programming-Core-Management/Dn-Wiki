@@ -73,193 +73,188 @@
 
 ### Parameters
 
-- m_iExpansionChip
-- m_iChannelsAvailable
-- m_iMachine
-- m_iEngineSpeed
-- m_iVibratoStyle
-- m_vHighlight
-- m_iNamcoChannels
-- m_iSpeedSplitPoint
-- m_iDetuneSemitone
-- m_iDetuneCent
+- `m_iExpansionChip`
+- `m_iChannelsAvailable`
+- `m_iMachine`
+- `m_iEngineSpeed`
+- `m_iVibratoStyle`
+- `m_vHighlight`
+- `m_iNamcoChannels`
+- `m_iSpeedSplitPoint`
+- `m_iDetuneSemitone`
+- `m_iDetuneCent`
 
 ### Song Info
 
-- m_strName
-- m_strArtist
-- m_strCopyright
+- `m_strName`
+- `m_strArtist`
+- `m_strCopyright`
 
 ### Tuning
 
-- m_iDetuneSemitone
-- m_iDetuneCent
+- `m_iDetuneSemitone`
+- `m_iDetuneCent`
 
 ### Instruments
 
 - Instrument index
 - Instrument count
 - pInstrument
-  - Type
-  - CInstrumentManager
-  - Instrument name length
-  - Name
+	- Type
+	- CInstrumentManager
+	- Instrument name length
+	- Name
 
 ### Sequences
 
 - 2A03 sequence count
-  - Sequence index
-  - Sequence type
-  - Sequence item count
-  - Sequence loop point
-  - Sequence release point
-  - Settings
-  - for each Sequence item count:
-    - Value
+	- Sequence index
+	- Sequence type
+	- Sequence item count
+	- Sequence loop point
+	- Sequence release point
+	- Settings
+	- `SequenceData[Sequence item count]`
 
 ### Frames
 
-- for each m_iTrackCount:
-  - Track frame count
-    - m_iChannelsAvailable
-      - Pattern index
-  - Track default speed
-  - Track default tempo
-  - Track default row count (PatternLength)
+- for each `m_iTrackCount`:
+	- Track frame count
+		- `m_iChannelsAvailable`
+			- Pattern index
+	- Track default speed
+	- Track default tempo
+	- Track default row count (`PatternLength`)
 
 ### Patterns
 
-- Pattern track index
-- Pattern channel index
-- Pattern index
-- Pattern data count
-  - Row index
-    - stChanNote Note
-      - Note value
-      - Octave value
-      - Instrument index
-      - Channel volume
-    - effect columns
-      - Effect index
-      - Effect Param
+- for each `m_iTrackCount`:
+	- Pattern track index
+	- Pattern channel index
+	- Pattern index
+	- Pattern data count
+		- Row index
+			- `stChanNote` Note, consisting of:
+				- Note value
+				- Octave value
+				- Instrument index
+				- Channel volume
+			- for each effect columns
+				- Effect index
+				- Effect Param
 
 ### DSamples
 
-- DPCM sample count
-  - DPCM sample index
-  - DPCM sample name length
-  - DPCM sample name
-  - DPCM sample size
-  - DPCM sample bytes
+- for each DPCM sample count
+	- DPCM sample index
+	- DPCM sample name length
+	- DPCM sample name
+	- DPCM sample size
+	- DPCM sample bytes
 
 ### Header
 
-- m_iTrackCount
-  - m_pTracks[i]
-- for each m_iChannelsAvailable:
-  - Channel type index (unused)
-  - for each m_iTrackCount:
-    - Effect column count
-- for each m_iTrackCount:
-  - m_vHighlight.First
-  - m_vHighlight.Second
+- for each `m_iTrackCount`
+	- `m_pTracks[i]`
+- for each `m_iChannelsAvailable`:
+	- Channel type index (unused)
+	- for each `m_iTrackCount`:
+	- Effect column count
+- for each `m_iTrackCount`:
+	- `m_vHighlight.First`
+	- `m_vHighlight.Second`
 
 ### Comments
 
-- m_bDisplayComment
-- m_strComment
+- `m_bDisplayComment`
+- `m_strComment`
 
 ### Sequences VRC6
 
-- VRC6 sequence count
-  - Sequence index
-  - Sequence type
-  - Sequence item count
-  - Sequence loop point
-  - Sequence release point
-  - Settings
-  - for each Sequence item count:
-    - Value
+- for each VRC6 sequence count
+	- Sequence index
+	- Sequence type
+	- Sequence item count
+	- Sequence loop point
+	- Sequence release point
+	- Settings
+	- `SequenceData[Sequence item count]`
 
 ### Sequences N163
 
-- N163 sequence count
-  - Sequence index
-  - Sequence type
-  - Sequence item count
-  - Sequence loop point
-  - Sequence release point
-  - Settings
-  - for each Sequence item count:
-    - Value
+- for each N163 sequence count
+	- Sequence index
+	- Sequence type
+	- Sequence item count
+	- Sequence loop point
+	- Sequence release point
+	- Settings
+	- `SequenceData[Sequence item count]`
 
 ### Sequences S5B
 
-- 5B sequence count
-  - Sequence index
-  - Sequence type
-  - Sequence item count
-  - Sequence loop point
-  - Sequence release point
-  - Settings
-  - for each Sequence item count:
-    - Value
+- for each 5B sequence count
+	- Sequence index
+	- Sequence type
+	- Sequence item count
+	- Sequence loop point
+	- Sequence release point
+	- Settings
+	- `SequenceData[Sequence item count]`
 
 ### Detune Tables
 
-- Detune table count
-  - Detune table index
-    - Detune table note count
-      - Detune table note index
+- for each Detune table count
+	- for each Detune table index
+		- for each Detune table note count
+			- Detune table note index
 
 ### Grooves
 
-- Groove count
-  - Groove index
-  - Groove size
-    - Groove item
-- Use-groove flag count
-  - Use-groove flag
+- for each Groove count
+	- Groove index
+	- Groove size
+	- Groove item
+- for each Use-groove flag count
+	- Use-groove flag
 
 ### Bookmarks
 
-- Bookmark Count
-  - CBookmark, which includes
-    - Bookmark track index
-    - Bookmark frame index
-    - Bookmark row index
-    - m_vHighlight.First
-    - m_vHighlight.Second
-    - m_bPersist
-    - m_sName
+- for each Bookmark Count
+	- `CBookmark`, which includes
+		- Bookmark track index
+		- Bookmark frame index
+		- Bookmark row index
+		- `m_vHighlight.First`
+		- `m_vHighlight.Second`
+		- `m_bPersist`
+		- `m_sName`
 
 ### Params Extra
 
-- m_bLinearPitch
+- `m_bLinearPitch`
 - Global semitone tuning
 - Global cent tuning
 
 ### JSON
 
-- (optional JSON data)
-  - APU1_OFFSET
-  - APU2_OFFSET
-  - VRC6_OFFSET
-  - VRC7_OFFSET
-  - FDS_OFFSET
-  - MMC5_OFFSET
-  - N163_OFFSET
-  - S5B_OFFSET
-  - USE_SURVEY_MIX
+- (optional JSON data, which includes:)
+	- `APU1_OFFSET`
+	- `APU2_OFFSET`
+	- `VRC6_OFFSET`
+	- `VRC7_OFFSET`
+	- `FDS_OFFSET`
+	- `MMC5_OFFSET`
+	- `N163_OFFSET`
+	- `S5B_OFFSET`
+	- `USE_SURVEY_MIX`
 
 ### ParamsEmu
 
-- m_bUseExternalOPLLChips
+- `m_bUseExternalOPLLChips`
 - for each patches:
-  - m_iOPLLPatchBytes[8]
-  - m_strOPLLPatchNames
-
-[Datatypes and constants](Datatypes%20and%20constants.md)
+	- `m_iOPLLPatchBytes[8]`
+	- `m_strOPLLPatchNames`
 
 ## File Header
 
