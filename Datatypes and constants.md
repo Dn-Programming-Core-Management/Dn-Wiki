@@ -132,6 +132,39 @@
 | `SEQ_DUTYCYCLE` | 4               |
 | `SEQ_COUNT`     | 5               |
 
+### `seq_setting_t` enum
+
+- base type: unsigned int
+
+| *Name*                   | *Numeric value* |
+| ------------------------ | --------------- |
+| `SETTING_DEFAULT`        | 0               |
+| `SETTING_VOL_16_STEPS`   | 0               |
+| `SETTING_VOL_64_STEPS`   | 1               |
+| `SETTING_ARP_ABSOLUTE`   | 0               |
+| `SETTING_ARP_FIXED`      | 1               |
+| `SETTING_ARP_RELATIVE`   | 2               |
+| `SETTING_ARP_SCHEME`     | 3               |
+| `SETTING_PITCH_RELATIVE` | 0               |
+| `SETTING_PITCH_ABSOLUTE` | 1               |
+| `SETTING_PITCH_SWEEP`    | 2 (unused)      |
+
+### `s5b_mode_t` enum
+
+| *Name*              | *Numeric value* |
+| ------------------- | --------------- |
+| `S5B_MODE_ENVELOPE` | 0x20            |
+| `S5B_MODE_SQUARE`   | 0x40            |
+| `S5B_MODE_NOISE`    | 0x80            |
+
+### `arp_scheme_mode_t` enum
+
+| *Name*                 | *Numeric value* |
+| ---------------------- | --------------- |
+| `ARPSCHEME_MODE_X`     | 0x40            |
+| `ARPSCHEME_MODE_Y`     | 0x80            |
+| `ARPSCHEME_MODE_NEG_Y` | 0xC0            |
+
 ## Constants
 
 ### Pattern and instrument constants
@@ -162,3 +195,5 @@
 | `NOTE_COUNT`         | int: `OCTAVE_RANGE * NOTE_RANGE` | Range of all available notes                                                                                      |
 | `INVALID_INSTRUMENT` | int: -1                          | Index of an invalid instrument. Might collide with `HOLD_INSTRUMENT`?                                             |
 | `MAX_VOLUME`         | int: `0x10`                      | Max allowed value in volume column. The actual meaning is no specific volume information, rather than max volume. |
+| `ARPSCHEME_MAX`      | 36                               | Highest note offset for arp schemes.                                                                              |
+| `ARPSCHEME_MIN`      | `ARPSCHEME_MAX - 0x3F`           |                                                                                                                   |
