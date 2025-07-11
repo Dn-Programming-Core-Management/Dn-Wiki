@@ -676,6 +676,22 @@ Block ID: `PATTERNS`
 
 Block ID: `DPCM SAMPLES`
 
+| _Data type_  | _Unit size (bytes)_ | _Repeat_          | _Object/relevant variable in code_ | _Description_           | _Valid range_            | _Notes_                                                                                                    | _Present in block version_ |
+| ------------ | ------------------- | ----------------- | ---------------------------------- | ----------------------- | ------------------------ | ---------------------------------------------------------------------------------------------------------- | -------------------------- |
+| char         | 1                   |                   | `Count`                            | DPCM sample count       | 0 to `MAX_DSAMPLES`      |                                                                                                            | 1+                         |
+| char         | 1                   | DPCM sample count | `Index`                            | DPCM sample index       | 0 to `MAX_DSAMPLES - 1`  |                                                                                                            | 1+                         |
+| unsigned int | 4                   | ^                 | `Len`                              | DPCM sample name length | 0 to `MAX_NAME_SIZE - 1` |                                                                                                            | 1+                         |
+| char[]       | `MAX_NAME_SIZE`     | ^                 | `Name`                             | DPCM sample name        | ASCII strings            | actual `Name` buffer is size `MAX_NAME_SIZE`, but only gets `Len` amount of bytes written.                 | 1+                         |
+| unsigned int | 4                   | ^                 | `Size`                             | DPCM sample size        | 0 to `0x7FFF`'           | size actually must be `(L * 16) + 1` bytes, where L ranges from 0 to 255. the max DPCM size is 4081 bytes. | 1+                         |
+| char[]       | `Size`              | ^                 | `pData`                            | DPCM sample data        |                          |                                                                                                            | 1+                         |
+
+
+- Information is based on `CFamiTrackerDoc::ReadBlock_DSamples` and [http://famitracker.com/wiki/index.php?title=FamiTracker_module#DPCM_SAMPLES](https://web.archive.org/web/20201124070633/http://famitracker.com/wiki/index.php?title=FamiTracker_module#DPCM_SAMPLES)
+- FT throws an error if the DPCM sample size is bigger than 4081 bytes, or if it is not `% 16==1`.
+	- See more details on the DMC sample length register: https://www.nesdev.org/wiki/APU_DMC#Overview
+- In 0CC-FT v0.3.14.1+, If DPCM data size is not `% 16 == 1`, it will be padded to a valid length with byte `0xAA`.
+	- padding is calculated as `TrueSize = Size + ((1 - Size) & 0x0F)`
+
 ### Comments block
 
 Block ID: `COMMENTS`
