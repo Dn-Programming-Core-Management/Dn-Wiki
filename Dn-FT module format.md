@@ -560,20 +560,20 @@ Block ID: `INSTRUMENTS`
 
 Block ID: `SEQUENCES`
 
-| _Data type_ | _Unit size (bytes)_             | _Repeat_                | _Object/relevant variable in code_ | _Description_                | _Valid range_                  | _Notes_                                                                                | _Present in block version_ |
-| ----------- | ------------------------------- | ----------------------- | ---------------------------------- | ---------------------------- | ------------------------------ | -------------------------------------------------------------------------------------- | -------------------------- |
-| int         | 4                               |                         | `Count`                            | 2A03 sequence count          | 0 to `MAX_SEQUENCES - 1`       | Only used sequences are counted                                                        | 1+                         |
-| int         | 4                               | Per 2A03 sequence count | `Index`                            | Sequence index               | 0 to `MAX_SEQUENCES - 1`       |                                                                                        | 1+                         |
-| int         | 4                               | ^                       | `Type`                             | Sequence type                | 0 to `SEQ_COUNT - 1`           | See table.                                                                             | 2+                         |
-| char        | 1                               | ^                       | `SeqCount`                         | Sequence run count           | 0 to `MAX_SEQUENCES_ITEMS - 1` | `SeqCount` has a different meaning in version 1-2                                      | 1-2                        |
-| char[]      | `SeqCount * 2` (number of runs) | ^                       | `Value`, `Length`                  | Sequence value, run length-1 |                                | RLE encoded sequence data?                                                             | 1-2                        |
-| char        | 1                               | ^                       | `SeqCount`                         | Sequence item count          | 0 to `MAX_SEQUENCES_ITEMS - 1` | Size of sequence data                                                                  | 3+                         |
-| int         | 4                               | ^                       | `LoopPoint`                        | Sequence loop point          | -1 to `SeqCount`               | -1 if it doesn't exist                                                                 | 3+                         |
-| int         | 4                               | ^                       | `ReleasePoint`                     | Sequence release point       | -1 to `SeqCount`               | -1 if it doesn't exist                                                                 | 4, 7                       |
-| int         | 4                               | ^                       | `Settings`                         | Sequence setting             | `seq_setting_t`                | See table.                                                                             | 4, 7                       |
-| char[]      | `SeqCount` (length of sequence) | ^                       | `Value`                            | Sequence value               |                                |                                                                                        | 3+                         |
-| int         | 4                               | Per 2A03 sequence       | `ReleasePoint`                     | Sequence release point       | -1 to `SeqCount - 1`           | Version 5 saved the release points incorrectly, fixed in ver 6. -1 if it doesn't exist | 5-6                        |
-| int         | 4                               | ^                       | `Settings`                         | Sequence setting             | `seq_setting_t`                |                                                                                        | 5-6                        |
+| _Data type_ | _Unit size (bytes)_             | _Repeat_                                     | _Object/relevant variable in code_ | _Description_                | _Valid range_                  | _Notes_                                                                                | _Present in block version_ |
+| ----------- | ------------------------------- | -------------------------------------------- | ---------------------------------- | ---------------------------- | ------------------------------ | -------------------------------------------------------------------------------------- | -------------------------- |
+| int         | 4                               |                                              | `Count`                            | 2A03 sequence count          | 0 to `MAX_SEQUENCES - 1`       | Only used sequences are counted                                                        | 1+                         |
+| int         | 4                               | Per 2A03 sequence count                      | `Index`                            | Sequence index               | 0 to `MAX_SEQUENCES - 1`       |                                                                                        | 1+                         |
+| int         | 4                               | ^                                            | `Type`                             | Sequence type                | 0 to `SEQ_COUNT - 1`           | See table.                                                                             | 2+                         |
+| char        | 1                               | ^                                            | `SeqCount`                         | Sequence run count           | 0 to `MAX_SEQUENCES_ITEMS - 1` | `SeqCount` has a different meaning in version 1-2                                      | 1-2                        |
+| char[]      | `SeqCount * 2` (number of runs) | ^                                            | `Value`, `Length`                  | Sequence value, run length-1 |                                | RLE encoded sequence data?                                                             | 1-2                        |
+| char        | 1                               | ^                                            | `SeqCount`                         | Sequence item count          | 0 to `MAX_SEQUENCES_ITEMS - 1` | Size of sequence data                                                                  | 3+                         |
+| int         | 4                               | ^                                            | `LoopPoint`                        | Sequence loop point          | -1 to `SeqCount`               | -1 if it doesn't exist                                                                 | 3+                         |
+| int         | 4                               | ^                                            | `ReleasePoint`                     | Sequence release point       | -1 to `SeqCount`               | -1 if it doesn't exist                                                                 | 4, 7                       |
+| int         | 4                               | ^                                            | `Settings`                         | Sequence setting             | `seq_setting_t`                | See table.                                                                             | 4, 7                       |
+| char[]      | `SeqCount` (length of sequence) | ^                                            | `Value`                            | Sequence value               |                                |                                                                                        | 3+                         |
+| int         | 4                               | Per 2A03 sequence (separate repeat sequence) | `ReleasePoint`                     | Sequence release point       | -1 to `SeqCount - 1`           | Version 5 saved the release points incorrectly, fixed in ver 6. -1 if it doesn't exist | 5-6                        |
+| int         | 4                               | ^                                            | `Settings`                         | Sequence setting             | `seq_setting_t`                |                                                                                        | 5-6                        |
 
 #### Sequence type
 
@@ -587,12 +587,12 @@ Block ID: `SEQUENCES`
 | ----- | -------- | ----- | -------- | ------------------------------------ |
 | Type  | Absolute | Fixed | Relative | Sequence is not an arpeggio sequence |
 
-Source: [http://famitracker.com/wiki/index.php?title=FamiTracker_module#SEQUENCES](https://web.archive.org/web/20201124070633/http://famitracker.com/wiki/index.php?title=FamiTracker_module#SEQUENCES)
 
 #### Notes
 
-- Information is based on `CFamiTrackerDoc::WriteBlock_Header()`, `CFamiTrackerDoc::ReadBlock_Sequences()`
+- Information is based on `CFamiTrackerDoc::WriteBlock_Header()`, `CFamiTrackerDoc::ReadBlock_Sequences()` and [http://famitracker.com/wiki/index.php?title=FamiTracker_module#SEQUENCES](https://web.archive.org/web/20201124070633/http://famitracker.com/wiki/index.php?title=FamiTracker_module#SEQUENCES)
 - This stores 2A03 sequences.
+- Before block version 2, only 72 notes were defined.
 - in FamiTracker 0.5.0 beta 10, this is only saved when any sequences exist in the module.
 - in FamiTracker 0.5.0 beta 10, the sequence release point and setting has shifted back to version 4's place.
 
@@ -696,11 +696,21 @@ Block ID: `DPCM SAMPLES`
 
 Block ID: `COMMENTS`
 
+| _Data type_  | _Unit size (bytes)_                     | _Repeat_ | _Object/relevant variable in code_ | _Description_                      | _Valid range_ | _Notes_                                     | _Present in block version_ |
+| ------------ | --------------------------------------- | -------- | ---------------------------------- | ---------------------------------- | ------------- | ------------------------------------------- | -------------------------- |
+| unsigned int | 4                                       |          | `m_bDisplayComment`                | Display module comment when opened | 0, 1          | Boolean value (0, 1) but stored as integer. | 1+                         |
+| char[]       | Length of zero-terminated char[] string |          | `m_strComment`                     | Module comment data.               |               |                                             | 1+                         |
+
+- Information is based on `CFamiTrackerDoc::ReadBlock_Comments` and [http://famitracker.com/wiki/index.php?title=FamiTracker_module#COMMENTS](https://web.archive.org/web/20201124070633/http://famitracker.com/wiki/index.php?title=FamiTracker_module#COMMENTS)
+
 ## Expansion blocks
 
 ### VRC6 Sequences block
 
 Block ID: `SEQUENCES_VRC6`
+
+- Data format is identical to that of the [Sequences block](Dn-FT%20module%20format.md#Sequences%20block).
+- Information is based on `CFamiTrackerDoc::ReadBlock_SequencesVRC6` and [http://famitracker.com/wiki/index.php?title=FamiTracker_module#SEQUENCES_VRC6](https://web.archive.org/web/20201124070633/http://famitracker.com/wiki/index.php?title=FamiTracker_module#SEQUENCES_VRC6)
 
 ### N163 Sequences block
 
