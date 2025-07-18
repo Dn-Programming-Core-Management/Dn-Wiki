@@ -368,8 +368,9 @@ Block ID: `TUNING`
 #### Notes
 
 - Information is based on `CFamiTrackerDoc::WriteBlock_Tuning()` and module binary analysis
-- Added in FamiTracker 0.5.0 beta 10
-- Global semitone and cent detuning equivalent in Extra Parameters block.
+- Added in FamiTracker 0.5.0 beta 10.
+- Tuning block loading/saving added in Dn-FamiTracker v0.5.0.0
+- 0CC-FamiTracker implements global detuning in its Extra Parameters block.
 
 ### Header block
 
@@ -731,10 +732,10 @@ Block ID: `DPCM SAMPLES`
 
 Block ID: `COMMENTS`
 
-| _Data type_  | _Unit size (bytes)_                     | _Repeat_ | _Object/relevant variable in code_ | _Description_                      | _Valid range_ | _Notes_                                     | _Present in block version_ |
-| ------------ | --------------------------------------- | -------- | ---------------------------------- | ---------------------------------- | ------------- | ------------------------------------------- | -------------------------- |
-| unsigned int | 4                                       |          | `m_bDisplayComment`                | Display module comment when opened | 0, 1          | Boolean value (0, 1) but stored as integer. | 1+                         |
-| char[]       | Length of zero-terminated char[] string |          | `m_strComment`                     | Module comment data.               |               |                                             | 1+                         |
+| _Data type_  | _Unit size (bytes)_                     | _Repeat_ | _Object/relevant variable in code_ | _Description_                      | _Valid range_ | _Notes_                         | _Present in block version_ |
+| ------------ | --------------------------------------- | -------- | ---------------------------------- | ---------------------------------- | ------------- | ------------------------------- | -------------------------- |
+| unsigned int | 4                                       |          | `m_bDisplayComment`                | Display module comment when opened | 0, 1          | Boolean value stored as integer | 1+                         |
+| char[]       | Length of zero-terminated char[] string |          | `m_strComment`                     | Module comment data.               |               |                                 | 1+                         |
 
 #### Notes
 
@@ -813,17 +814,88 @@ Block ID: `SEQUENCES_S5B`
 
 Block ID: `PARAMS_EXTRA`
 
+| _Data type_  | _Unit size (bytes)_ | _Repeat_ | _Object/relevant variable in code_ | _Description_          | _Valid range_ | _Notes_                         | _Present in block version_ |
+| ------------ | ------------------- | -------- | ---------------------------------- | ---------------------- | ------------- | ------------------------------- | -------------------------- |
+| unsigned int | 4                   |          | `m_bLinearPitch`                   | Linear pitch           | 0, 1          | Boolean value stored as integer | 1+                         |
+| char         | 1                   |          | `m_iDetuneSemitone`                | Global semitone tuning | -12 to 12     |                                 | 2+                         |
+| char         | 1                   |          | `m_iDetuneCent`                    | Global cent tuning     | -100 to 100   |                                 | 2+                         |
+
+#### Notes
+
+- Information is based on `CFamiTrackerDoc::ReadBlock_ParamsExtra`
+- This is equivalent to FT 0.5.0 b10's `TUNING` block.
+
 ### Detune Tables block
 
 Block ID: `DETUNETABLES`
+
+| _Data type_  | _Unit size (bytes)_          | _Repeat_           | _Object/relevant variable in code_ | _Description_                                  | _Valid range_     | _Notes_                                             | _Present in block version_ |
+| ------------ | ---------------------------- | ------------------ | ---------------------------------- | ---------------------------------------------- | ----------------- | --------------------------------------------------- | -------------------------- |
+| char         | 1                            |                    | `Count`                            | Detune table count                             | 0 to 6            | Each detune table is specific to each tuning table. | 1+                         |
+| char         | 1                            | Detune table count | `Chip`                             | Detune table index                             | 0 to 5            | See Detune table chip index table.                  | 1+                         |
+| char         | Detune table index           | ^                  | `Item`                             |                                                | 0 to `NOTE_COUNT` |                                                     | 1+                         |
+| char, int\[] | 5 \* Detune table note count | ^                  | `Note`, `Offset`                   | Detune table note index and offset tuple array |                   | See table.                                          |                            |
+
+#### Detune table note index and offset tuple array
+
+| _Data type_ | _Unit size (bytes)_ | _Repeat_ | _Object/relevant variable in code_ | _Description_           | _Valid range_         | _Notes_                                                           | _Present in block version_ |
+| ----------- | ------------------- | -------- | ---------------------------------- | ----------------------- | --------------------- | ----------------------------------------------------------------- | -------------------------- |
+| char        | 1                   |          | `Note`                             | Detune table note index | 0 to `NOTE_COUNT - 1` |                                                                   | 1+                         |
+| int         | 4                   |          | `Offset`                           | Offset value            | range of `int_32`?    | Detune offset is relative to default tuning, which is 12TET A440. | 1+                         |
+
+
+#### Detune table chip index
+
+| Table type | Table Chip Index |
+| ---------- | ---------------- |
+| NTSC       | 0                |
+| PAL        | 1                |
+| VRC6       | 2                |
+| VRC7       | 3                |
+| FDS        | 4                |
+| N163       | 5                |
+
+#### Notes
+
+- Information is based on `CFamiTrackerDoc::ReadBlock_DetuneTables`
+- Detune information stores detune offsets from
+
 
 ### Grooves block
 
 Block ID: `GROOVES`
 
+| _Data type_ | _Unit size (bytes)_ | _Repeat_              | _Object/relevant variable in code_ | _Description_         | _Valid range_          | _Notes_                                      | _Present in block version_ |
+| ----------- | ------------------- | --------------------- | ---------------------------------- | --------------------- | ---------------------- | -------------------------------------------- | -------------------------- |
+| char        | 1                   |                       | `Count`                            | Groove count          | 0 to `MAX_GROOVE`      |                                              | 1+                         |
+| char        | 1                   | Groove count          | `Index`                            | Groove index          | 0 to `MAX_GROOVE - 1`  |                                              | 1+                         |
+| char        | 1                   | ^                     | `Size`                             | Groove size           | 1 to `MAX_GROOVE_SIZE` |                                              | 1+                         |
+| char\[]     | Groove size         | ^                     | `Value`                            | Groove item           | 1 to 255               |                                              | 1+                         |
+| char        | 1                   |                       | `Tracks`                           | Use-groove flag count | `m_iTrackCount`        | Use-groove flag count must match track count | 1+                         |
+| char        | 1                   | Use-groove flag count | `Use`                              | Use-groove flag       | 0, 1                   | Boolean value stored as char.                |                            |
+
+#### Notes
+
+- Information is based on `CFamiTrackerDoc::ReadBlock_Grooves`
+
 ### Bookmarks block
 
 Block ID: `BOOKMARKS`
+
+| _Data type_ | _Unit size (bytes)_                      | _Repeat_       | _Object/relevant variable in code_ | _Description_         | _Valid range_                                              | _Notes_                                                                                                  | _Present in block version_ |
+| ----------- | ---------------------------------------- | -------------- | ---------------------------------- | --------------------- | ---------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- | -------------------------- |
+| int         | 4                                        |                | `Count`                            | Bookmark count        | range of `int_32`?                                         |                                                                                                          | 1+                         |
+| char        | 1                                        | Bookmark count | `Track`                            | Bookmark track index  | 0 to `m_iTrackCount - 1`                                   |                                                                                                          | 1+                         |
+| char        | 1                                        | ^              | `Frame`                            | Bookmark frame index  | 0 to `m_iFrameCount - 1` of current track being indexed    |                                                                                                          | 1+                         |
+| char        | 1                                        | ^              | `Row`                              | Bookmark row index    | 0 to `m_iPatternLength - 1` of current track being indexed |                                                                                                          | 1+                         |
+| int         | 4                                        | ^              | `pMark->m_Highlight.First`         | 1st row highlight     | range of `int_32`?                                         |                                                                                                          | 1+                         |
+| int         | 4                                        | ^              | `pMark->m_Highlight.Second`        | 2nd row highlight     | range of `int_32`?                                         |                                                                                                          | 1+                         |
+| char        | 1                                        | ^              | `pMark->m_bPersist`                | Bookmark persist flag | 0, 1                                                       | Boolean value stored as char. When enabled, applies the bookmark highlight for all the following frames. | 1+                         |
+| char\[]     | Length of zero-terminated char\[] string | ^              | `pMark->m_sName`                   | Bookmark name         |                                                            |                                                                                                          | 1+                         |
+
+#### Notes
+
+- Information is based on `CFamiTrackerDoc::ReadBlock_Bookmarks`
 
 ## Dn-FamiTracker extension blocks
 
