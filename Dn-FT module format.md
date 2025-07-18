@@ -291,7 +291,7 @@
 
 | Data type    | Unit size (bytes) | Repeat | Object/relevant variable in code      | Description       | Valid values                                  | Notes                                                                                                     |
 | ------------ | ----------------- | ------ | ------------------------------------- | ----------------- | --------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
-| char[256]    | 256               |        | `FILE_HEADER_ID`, `FILE_HEADER_ID_DN` | Identifier string | `FamiTracker Module`, `Dn-FamiTracker Module` | In Dn-FT v0.5.0.0, this was changed to `Dn-FamiTracker Module` to avoid collision with FT 0.5.0b modules. |
+| char\[256]   | 256               |        | `FILE_HEADER_ID`, `FILE_HEADER_ID_DN` | Identifier string | `FamiTracker Module`, `Dn-FamiTracker Module` | In Dn-FT v0.5.0.0, this was changed to `Dn-FamiTracker Module` to avoid collision with FT 0.5.0b modules. |
 | unsigned int | 4                 |        | `m_iFileVersion`                      | Module version    |                                               | Version number is formatted as BCD (ex. 4.50)                                                             |
 
 ### Notes
@@ -305,7 +305,7 @@ Each block has a 24-byte header consisting of a block ID, block version, and blo
 
 | Data type    | Unit size (bytes) | Repeat | Object/relevant variable in code | Description                               | Valid range      | Notes                                                                                    |
 | ------------ | ----------------- | ------ | -------------------------------- | ----------------------------------------- | ---------------- | ---------------------------------------------------------------------------------------- |
-| char[16]     | 16                |        | `m_cBlockID`                     | Identifier string                         | `char` data      | Length is zero-padded to 16 bytes                                                        |
+| char\[16]    | 16                |        | `m_cBlockID`                     | Identifier string                         | `char` data      | Length is zero-padded to 16 bytes                                                        |
 | unsigned int | 4                 |        | `m_iBlockVersion`                | Block version                             | 0x0000 to 0xFFFF | Block version number is ANDed with 0xFFFF, but is still written as 32-bit signed integer |
 | unsigned int | 4                 |        | `m_iBlockPointer`                | Block size, not counting the block header |                  |                                                                                          |
 
@@ -342,14 +342,14 @@ Block ID: `PARAMS`
 
 Block ID: `INFO`
 
-| _Data type_ | _Unit size (bytes)_                     | _Repeat_ | _Object/relevant variable in code_ | _Description_    | _Valid range_ | _Notes_                                        | _Present in block version_ |
-| ----------- | --------------------------------------- | -------- | ---------------------------------- | ---------------- | ------------- | ---------------------------------------------- | -------------------------- |
-| char[32]    | 32                                      |          | `m_strName`                        | Module name      |               | Length is zero-padded to 32 bytes              | 1                          |
-| char[32]    | 32                                      |          | `m_strArtist`                      | Module artist    |               | Length is zero-padded to 32 bytes              | 1                          |
-| char[32]    | 32                                      |          | `m_strCopyright`                   | Module copyright |               | Length is zero-padded to 32 bytes              | 1                          |
-| char[]      | Length of zero-terminated char[] string |          | `m_strName`                        | Module name      |               | Length of string must not exceed 32 characters | 2                          |
-| char[]      | Length of zero-terminated char[] string |          | `m_strArtist`                      | Module artist    |               | Length of string must not exceed 32 characters | 2                          |
-| char[]      | Length of zero-terminated char[] string |          | `m_strCopyright`                   | Module copyright |               | Length of string must not exceed 32 characters | 2                          |
+| _Data type_ | _Unit size (bytes)_                      | _Repeat_ | _Object/relevant variable in code_ | _Description_    | _Valid range_ | _Notes_                                        | _Present in block version_ |
+| ----------- | ---------------------------------------- | -------- | ---------------------------------- | ---------------- | ------------- | ---------------------------------------------- | -------------------------- |
+| char[32]    | 32                                       |          | `m_strName`                        | Module name      |               | Length is zero-padded to 32 bytes              | 1                          |
+| char[32]    | 32                                       |          | `m_strArtist`                      | Module artist    |               | Length is zero-padded to 32 bytes              | 1                          |
+| char[32]    | 32                                       |          | `m_strCopyright`                   | Module copyright |               | Length is zero-padded to 32 bytes              | 1                          |
+| char\[]     | Length of zero-terminated char\[] string |          | `m_strName`                        | Module name      |               | Length of string must not exceed 32 characters | 2                          |
+| char\[]     | Length of zero-terminated char\[] string |          | `m_strArtist`                      | Module artist    |               | Length of string must not exceed 32 characters | 2                          |
+| char\[]     | Length of zero-terminated char\[] string |          | `m_strCopyright`                   | Module copyright |               | Length of string must not exceed 32 characters | 2                          |
 
 #### Notes
 
@@ -382,7 +382,7 @@ Block ID: `HEADER`
 | char        | 1                                       |                        | `m_iTrackCount`                    | Number of tracks added.                                           | 0 to `MAX_TRACKS - 1`            | Stored as `m_iTrackCount` - 1                                                | 2-4                        |
 | char[]      | Length of zero-terminated char[] string | `m_iTrackCount`        | `m_pTracks[]->m_sTrackName`        | Names of each track                                               |                                  | Each track name is zero terminated, and therefore delineated by a byte of 0. | 3-4                        |
 | char        | 1                                       | `m_iChannelsAvailable` | `m_iChannelTypes[]`                | Channel type index                                                | 0 to `chan_id_t::CHANNELS - 1`   | See Channel ID table.                                                        | 1-4                        |
-| char[]      | `m_iTrackCount`                         | ^                      | `m_pTracks[]->m_iEffectColumns[]`  | Number of additional effect columns on a given channel, per track | 0 to `MAX_EFFECT_COLUMNS - 1`    | On version 1, this was restricted to the first track.                        | 1-4                        |
+| char\[]     | `m_iTrackCount`                         | ^                      | `m_pTracks[]->m_iEffectColumns[]`  | Number of additional effect columns on a given channel, per track | 0 to `MAX_EFFECT_COLUMNS - 1`    | On version 1, this was restricted to the first track.                        | 1-4                        |
 | int         | 4                                       | `m_iTrackCount`        | `m_vHighlight.First`               | 1st row highlight                                                 | 0 to 255 (cast to unsigned char) | FT 050b1. Stores per-track row highlights.                                   | 4                          |
 | int         | 4                                       | ^                      | `m_vHighlight.Second`              | 2nd row highlight                                                 | 0 to 255 (cast to unsigned char) | FT 050B1. Stores per-track row highlights.                                   | 4                          |
 
@@ -407,28 +407,28 @@ Block ID: `HEADER`
 
 Block ID: `TRACK`
 
-| _Data type_  | _Unit size (bytes)_                     | _Repeat_        | _Object/relevant variable in code_ | _Description_                                                 | _Valid range_                 | _Notes_                        | _Present in block version_ |
-| ------------ | --------------------------------------- | --------------- | ---------------------------------- | ------------------------------------------------------------- | ----------------------------- | ------------------------------ | -------------------------- |
-| char         | 1                                       |                 |                                    | data: track name                                              | 0x00                          | Track name data indicator      | 1                          |
-| char[]       | Length of zero-terminated char[] string |                 | `m_pTracks[]->m_sTrackName`        | Track name                                                    |                               | Track name is zero terminated. | 1                          |
-| char         | 1                                       |                 |                                    | data: track settings                                          | 0x01                          | Track setting data indicator   | 1                          |
-| unsigned int | 4                                       |                 |                                    | Track default row count                                       | 1 to `MAX_PATTERN_LENGTH`     |                                | 1                          |
-| unsigned int | 4                                       |                 |                                    | Track default speed                                           | 0 to `MAX_TEMPO`              |                                | 1                          |
-| unsigned int | 4                                       |                 |                                    | Track default tempo                                           | 0 to `MAX_TEMPO`              |                                | 1                          |
-| char         | 1                                       |                 |                                    | data: track row highlight                                     | 0x02                          | Row highlight data indicator   | 1                          |
-| char         | 1                                       |                 | `m_vHighlight.First`               | 1st row highlight                                             |                               | Stores track row highlights.   | 1                          |
-| char         | 1                                       |                 | `m_vHighlight.Second`              | 2nd row highlight                                             |                               | Stores track row highlights.   | 1                          |
-| char         | 1                                       |                 |                                    | data: track effect columns                                    | 0x03                          | Effect column data indicator   | 1                          |
-| char[]       | `m_iTrackCount`                         |                 | `m_pTracks[]->m_iEffectColumns[]`  | Number of additional effect columns on a channel, per channel | 0 to `MAX_EFFECT_COLUMNS - 1` |                                | 1                          |
-| char         | 1                                       |                 |                                    | data: track frame data                                        | 0x04                          | Denotes frames                 | 1                          |
-| unsigned int | 4                                       |                 | `m_iFrameCount`                    | Track frame count                                             | 1 to `MAX_FRAMES`             |                                | 1                          |
-| char[]       | `m_iChannelsAvailable`                  | `m_iFrameCount` |                                    | Pattern indices in a given frame                              | 0 to `MAX_PATTERN - 1`        |                                | 1                          |
-| char         | 1                                       |                 |                                    | data: track pattern data                                      | 0x05                          | Pattern data indicator         | 1                          |
-| unsigned int | 4                                       |                 |                                    | Pattern size                                                  |                               |                                | 1                          |
-| char         | 1                                       | Pattern count   |                                    | Pattern channel index                                         |                               |                                | 1                          |
-| char         | 1                                       | ^               |                                    | Pattern index                                                 |                               |                                | 1                          |
-| uint16       | 2                                       | ^               |                                    | Pattern data count                                            | 0 to `MAX_PATTERN_LENGTH`     |                                | 1                          |
-| char[]       |                                         | ^               |                                    | Row data                                                      |                               | See row data format.           | 1                          |
+| _Data type_  | _Unit size (bytes)_                      | _Repeat_        | _Object/relevant variable in code_ | _Description_                                                 | _Valid range_                 | _Notes_                        | _Present in block version_ |
+| ------------ | ---------------------------------------- | --------------- | ---------------------------------- | ------------------------------------------------------------- | ----------------------------- | ------------------------------ | -------------------------- |
+| char         | 1                                        |                 |                                    | data: track name                                              | 0x00                          | Track name data indicator      | 1                          |
+| char\[]      | Length of zero-terminated char\[] string |                 | `m_pTracks[]->m_sTrackName`        | Track name                                                    |                               | Track name is zero terminated. | 1                          |
+| char         | 1                                        |                 |                                    | data: track settings                                          | 0x01                          | Track setting data indicator   | 1                          |
+| unsigned int | 4                                        |                 |                                    | Track default row count                                       | 1 to `MAX_PATTERN_LENGTH`     |                                | 1                          |
+| unsigned int | 4                                        |                 |                                    | Track default speed                                           | 0 to `MAX_TEMPO`              |                                | 1                          |
+| unsigned int | 4                                        |                 |                                    | Track default tempo                                           | 0 to `MAX_TEMPO`              |                                | 1                          |
+| char         | 1                                        |                 |                                    | data: track row highlight                                     | 0x02                          | Row highlight data indicator   | 1                          |
+| char         | 1                                        |                 | `m_vHighlight.First`               | 1st row highlight                                             |                               | Stores track row highlights.   | 1                          |
+| char         | 1                                        |                 | `m_vHighlight.Second`              | 2nd row highlight                                             |                               | Stores track row highlights.   | 1                          |
+| char         | 1                                        |                 |                                    | data: track effect columns                                    | 0x03                          | Effect column data indicator   | 1                          |
+| char\[]      | `m_iTrackCount`                          |                 | `m_pTracks[]->m_iEffectColumns[]`  | Number of additional effect columns on a channel, per channel | 0 to `MAX_EFFECT_COLUMNS - 1` |                                | 1                          |
+| char         | 1                                        |                 |                                    | data: track frame data                                        | 0x04                          | Denotes frames                 | 1                          |
+| unsigned int | 4                                        |                 | `m_iFrameCount`                    | Track frame count                                             | 1 to `MAX_FRAMES`             |                                | 1                          |
+| char\[]      | `m_iChannelsAvailable`                   | `m_iFrameCount` |                                    | Pattern indices in a given frame                              | 0 to `MAX_PATTERN - 1`        |                                | 1                          |
+| char         | 1                                        |                 |                                    | data: track pattern data                                      | 0x05                          | Pattern data indicator         | 1                          |
+| unsigned int | 4                                        |                 |                                    | Pattern size                                                  |                               |                                | 1                          |
+| char         | 1                                        | Pattern count   |                                    | Pattern channel index                                         |                               |                                | 1                          |
+| char         | 1                                        | ^               |                                    | Pattern index                                                 |                               |                                | 1                          |
+| uint16       | 2                                        | ^               |                                    | Pattern data count                                            | 0 to `MAX_PATTERN_LENGTH`     |                                | 1                          |
+| char\[]      |                                          | ^               |                                    | Row data                                                      |                               | See row data format.           | 1                          |
 
 #### Row data format
 
@@ -465,7 +465,7 @@ Block ID: `INSTRUMENTS`
 | char        | 1                          | ^              | `m_pInstrumentManager->GetInstrument()->m_iType`                 | Instrument type        | `enum inst_type_t`         | See table.                                                     | 1+                         |
 | CInstrument | size of CInstrument object | ^              | `m_pInstrumentManager->GetInstrument()`                          | Instrument definition  |                            | See [Dn-FT instrument format](Dn-FT%20instrument%20format.md). | 1+                         |
 | int         | 4                          | ^              | `strlen()` of `m_pInstrumentManager->GetInstrument()->GetName()` | Instrument name length | 0 to `INST_NAME_MAX`       |                                                                | 1+                         |
-| char[]      | Instrument name length     | ^              | `m_pInstrumentManager->GetInstrument()->GetName()`               | Instrument name        |                            |                                                                | 1+                         |
+| char\[]     | Instrument name length     | ^              | `m_pInstrumentManager->GetInstrument()->GetName()`               | Instrument name        |                            |                                                                | 1+                         |
 
 #### Notes
 
@@ -531,7 +531,7 @@ Block ID: `INSTRUMENTS`
 | _Data type_ | _Unit size (bytes)_ | _Repeat_ | _Object/relevant variable in code_ | _Description_         | _Valid range_ | _Notes_                                  | _Present in block version_ |
 | ----------- | ------------------- | -------- | ---------------------------------- | --------------------- | ------------- | ---------------------------------------- | -------------------------- |
 | int         | 4                   |          | `CInstrumentVRC7::m_iPatch`        | VRC7 patch number     |               | Hardware patch number of the instrument. | 2+                         |
-| char[8]     | 8                   |          | `CInstrumentVRC7::m_iRegs[]`       | Custom patch settings |               | Patch settings of hardware patch 0.      | 2+                         |
+| char\[8]    | 8                   |          | `CInstrumentVRC7::m_iRegs[]`       | Custom patch settings |               | Patch settings of hardware patch 0.      | 2+                         |
 
 ###### Notes
 
@@ -539,18 +539,18 @@ Block ID: `INSTRUMENTS`
 
 ##### FDS instruments
 
-| _Data type_     | _Unit size (bytes)_ | _Repeat_                         | _Object/relevant variable in code_   | _Description_               | _Valid range_       | _Notes_ | _Present in block version_ |
-| --------------- | ------------------- | -------------------------------- | ------------------------------------ | --------------------------- | ------------------- | ------- | -------------------------- |
-| char[WAVE_SIZE] | WAVE_SIZE           |                                  | `CInstrumentFDS::m_iSamples[]`       | Wave data                   |                     |         | 3+                         |
-| char[MOD_SIZE]  | MOD_SIZE            |                                  | `CInstrumentFDS::m_iModulation[]`    | Modulation table            |                     |         | 3+                         |
-| int             | 4                   |                                  | `CInstrumentFDS::m_iModulationSpeed` | Instrument modulation rate  |                     |         | 3+                         |
-| int             | 4                   |                                  | `CInstrumentFDS::m_iModulationDepth` | Instrument modulation depth |                     |         | 3+                         |
-| int             | 4                   |                                  | `CInstrumentFDS::m_iModulationDelay` | Instrument modulation delay |                     |         | 3+                         |
-| char            | 1                   | `CInstrumentFDS::SEQUENCE_COUNT` | `CSequence::m_iItemCount`            | Sequence item count         | 0 to 255            |         | 3+                         |
-| int             | 4                   | ^                                | `CSequence::m_iLoopPoint`            | Sequence loop point         | -1 to`SeqCount - 1` |         | 3+                         |
-| int             | 4                   | ^                                | `CSequence::m_iReleasePoint`         | Sequence release point      | -1 to`SeqCount - 1` |         | 4+                         |
-| int             | 4                   | ^                                | `CSequence::m_iSetting`              | Sequence setting type       | `seq_setting_t`     |         | 4+                         |
-| char[]          | Sequence item count | ^                                | `CSequence::m_cValues[Index]`        | Sequence data               |                     |         | 3+                         |
+| _Data type_ | _Unit size (bytes)_ | _Repeat_                         | _Object/relevant variable in code_   | _Description_               | _Valid range_       | _Notes_ | _Present in block version_ |
+| ----------- | ------------------- | -------------------------------- | ------------------------------------ | --------------------------- | ------------------- | ------- | -------------------------- |
+| char\[]     | `WAVE_SIZE`         |                                  | `CInstrumentFDS::m_iSamples[]`       | Wave data                   |                     |         | 3+                         |
+| char\[]     | `MOD_SIZE`          |                                  | `CInstrumentFDS::m_iModulation[]`    | Modulation table            |                     |         | 3+                         |
+| int         | 4                   |                                  | `CInstrumentFDS::m_iModulationSpeed` | Instrument modulation rate  |                     |         | 3+                         |
+| int         | 4                   |                                  | `CInstrumentFDS::m_iModulationDepth` | Instrument modulation depth |                     |         | 3+                         |
+| int         | 4                   |                                  | `CInstrumentFDS::m_iModulationDelay` | Instrument modulation delay |                     |         | 3+                         |
+| char        | 1                   | `CInstrumentFDS::SEQUENCE_COUNT` | `CSequence::m_iItemCount`            | Sequence item count         | 0 to 255            |         | 3+                         |
+| int         | 4                   | ^                                | `CSequence::m_iLoopPoint`            | Sequence loop point         | -1 to`SeqCount - 1` |         | 3+                         |
+| int         | 4                   | ^                                | `CSequence::m_iReleasePoint`         | Sequence release point      | -1 to`SeqCount - 1` |         | 4+                         |
+| int         | 4                   | ^                                | `CSequence::m_iSetting`              | Sequence setting type       | `seq_setting_t`     |         | 4+                         |
+| char\[]     | Sequence item count | ^                                | `CSequence::m_cValues[Index]`        | Sequence data               |                     |         | 3+                         |
 
 ###### Notes
 
@@ -564,14 +564,14 @@ Block ID: `INSTRUMENTS`
 
 ##### N163 instruments
 
-| _Data type_       | _Unit size (bytes)_    | _Repeat_       | _Object/relevant variable in code_          | _Description_                                                                        | _Valid range_            | _Notes_                                                                           | _Present in block version_ |
-| ----------------- | ---------------------- | -------------- | ------------------------------------------- | ------------------------------------------------------------------------------------ | ------------------------ | --------------------------------------------------------------------------------- | -------------------------- |
-| CSeqInstrument    | size of CSeqInstrument |                |                                             | See [Base instrument format](Dn-FT%20module%20format.md#Base%20instrument%20format). |                          |                                                                                   | 1+                         |
-| int               | 4                      |                | `m_iWaveSize`                               | N163 wave size                                                                       | 4 to `MAX_WAVE_SIZE`     | In FT 0.5.0 beta, `m_iWaveSize` is determined by `m_iWaveCount / remaining_bytes` | 2-6                        |
-| int               | 4                      |                | `m_iWavePos`                                | N163 wave position                                                                   | 0 to `MAX_WAVE_SIZE - 1` | Ignored if `m_bAutoWavePos` is enabled                                            | 2-6                        |
-| int               | 4                      |                | `m_bAutoWavePos`                            | Automatic wave data RAM allocation                                                   | 0, nonzero               |                                                                                   | 8+                         |
-| int               | 4                      |                | `m_iWaveCount`                              | N163 wave count                                                                      | 1 to `MAX_WAVE_COUNT`    |                                                                                   | 2+                         |
-| char[m_iWaveSize] | `m_iWaveSize`          | `m_iWaveCount` | `m_iSamples[MAX_WAVE_COUNT][MAX_WAVE_SIZE]` | N163 wave sample                                                                     | 0 to 0xF                 |                                                                                   | 2+                         |
+| _Data type_        | _Unit size (bytes)_    | _Repeat_       | _Object/relevant variable in code_          | _Description_                                                                        | _Valid range_            | _Notes_                                                                           | _Present in block version_ |
+| ------------------ | ---------------------- | -------------- | ------------------------------------------- | ------------------------------------------------------------------------------------ | ------------------------ | --------------------------------------------------------------------------------- | -------------------------- |
+| CSeqInstrument     | size of CSeqInstrument |                |                                             | See [Base instrument format](Dn-FT%20module%20format.md#Base%20instrument%20format). |                          |                                                                                   | 1+                         |
+| int                | 4                      |                | `m_iWaveSize`                               | N163 wave size                                                                       | 4 to `MAX_WAVE_SIZE`     | In FT 0.5.0 beta, `m_iWaveSize` is determined by `m_iWaveCount / remaining_bytes` | 2-6                        |
+| int                | 4                      |                | `m_iWavePos`                                | N163 wave position                                                                   | 0 to `MAX_WAVE_SIZE - 1` | Ignored if `m_bAutoWavePos` is enabled                                            | 2-6                        |
+| int                | 4                      |                | `m_bAutoWavePos`                            | Automatic wave data RAM allocation                                                   | 0, nonzero               |                                                                                   | 8+                         |
+| int                | 4                      |                | `m_iWaveCount`                              | N163 wave count                                                                      | 1 to `MAX_WAVE_COUNT`    |                                                                                   | 2+                         |
+| char\[m_iWaveSize] | `m_iWaveSize`          | `m_iWaveCount` | `m_iSamples[MAX_WAVE_COUNT][MAX_WAVE_SIZE]` | N163 wave sample                                                                     | 0 to 0xF                 |                                                                                   | 2+                         |
 
 ###### Notes
 
@@ -603,7 +603,7 @@ Block ID: `SEQUENCES`
 | unsigned int | 4                       | ^                                            | `LoopPoint`                        | Sequence loop point         | -1 to `SeqCount`                                                         | -1 if it doesn't exist                                                                 | 3+                         |
 | unsigned int | 4                       | ^                                            | `ReleasePoint`                     | Sequence release point      | -1 to `SeqCount`                                                         | -1 if it doesn't exist                                                                 | 4, 7                       |
 | unsigned int | 4                       | ^                                            | `Settings`                         | Sequence setting            | [`seq_setting_t`](Datatypes%20and%20constants.md#`seq_setting_t`%20enum) | See table.                                                                             | 4, 7                       |
-| char[]       | Sequence item count     | ^                                            | `Value`                            | Sequence data               |                                                                          |                                                                                        | 3+                         |
+| char\[]      | Sequence item count     | ^                                            | `Value`                            | Sequence data               |                                                                          |                                                                                        | 3+                         |
 | int          | 4                       | Per 2A03 sequence (separate repeat sequence) | `ReleasePoint`                     | Sequence release point      | -1 to `SeqCount - 1`                                                     | Version 5 saved the release points incorrectly, fixed in ver 6. -1 if it doesn't exist | 5-6                        |
 | unsigned int | 4                       | ^                                            | `Settings`                         | Sequence setting            | [`seq_setting_t`](Datatypes%20and%20constants.md#`seq_setting_t`%20enum) |                                                                                        | 5-6                        |
 
@@ -644,7 +644,7 @@ Block ID: `FRAMES`
 | unsigned int | 4                                      | ^                                      | `m_iSongSpeed`                     | Track default speed     | 0 to `MAX_TEMPO`          |                                                                                                                                               | 3                          |
 | unsigned int | 4                                      | ^                                      | `m_iSongTempo`                     | Track default tempo     | 0 to `MAX_TEMPO`          | In block version 2, this either sets the tempo or the speed, depending if `Speed < 20`. In block version 3+, this exclusively sets the speed. | 2-3                        |
 | unsigned int | 4                                      | ^                                      | `m_iPatternLength`                 | Track default row count | 1 to `MAX_PATTERN_LENGTH` | Length of patterns (in length)                                                                                                                | 2-3                        |
-| char[]       | `m_iChannelsAvailable * m_iFrameCount` | ^                                      | `Pattern`                          | Pattern indices         | 0 to `MAX_PATTERN - 1`    |                                                                                                                                               | 1-3                        |
+| char\[]      | `m_iChannelsAvailable * m_iFrameCount` | ^                                      | `Pattern`                          | Pattern indices         | 0 to `MAX_PATTERN - 1`    |                                                                                                                                               | 1-3                        |
 #### Notes
 
 - Information is based on `CFamiTrackerDoc::WriteBlock_Header()`, `CFamiTrackerDoc::ReadBlock_Frames()`
@@ -663,7 +663,7 @@ Block ID: `PATTERNS`
 | unsigned int | 4                        | ^           | `Channel`                          | Pattern channel index        | 0 to `MAX_CHANNELS - 1`   |                                                    | 1+                         |
 | unsigned int | 4                        | ^           | `Pattern`                          | Pattern index                | 0 to `MAX_PATTERN - 1`    |                                                    | 1+                         |
 | unsigned int | 4                        | ^           | `Items`                            | Pattern data count           | 0 to `MAX_PATTERN_LENGTH` |                                                    | 1+                         |
-| char[]       | `Items` \* Row Data size | ^           |                                    | Row data (see section below) |                           |                                                    | 1+                         |
+| char\[]      | `Items` \* Row Data size | ^           |                                    | Row data (see section below) |                           |                                                    | 1+                         |
 
 #### Row Data
 
@@ -675,7 +675,7 @@ Block ID: `PATTERNS`
 | char         | 1                                          | ^        | `Octave`                           | Octave value                    | 0 to `OCTAVE_RANGE - 1` | Blank octave is indicated with value 0                                                                                                          | 1+                         |
 | char         | 1                                          | ^        | `Instrument`                       | Instrument index                | 0 to `MAX_INSTRUMENTS`  | Instrument indices equal to the hold note index will not be assigned to the pattern. Blank instrument is indicated with value `MAX_INSTRUMENTS` | 1+                         |
 | char         | 1                                          | ^        | `Vol`                              | Channel volume                  | 0 to `MAX_VOLUME`       | Blank volume is indicated with value `MAX_VOLUME`                                                                                               | 1+                         |
-| char[]       | `m_iEffectColumns` of current channel \* 2 | ^        |                                    | Effect data (see section below) |                         | In block versions 1-5, all effect columns were stored even if they are unused.                                                                  | 1+                         |
+| char\[]      | `m_iEffectColumns` of current channel \* 2 | ^        |                                    | Effect data (see section below) |                         | In block versions 1-5, all effect columns were stored even if they are unused.                                                                  | 1+                         |
 
 ##### Effect data
 
@@ -716,9 +716,9 @@ Block ID: `DPCM SAMPLES`
 | char         | 1                   |                   | `Count`                            | DPCM sample count       | 0 to `MAX_DSAMPLES`      |                                                                                                            | 1+                         |
 | char         | 1                   | DPCM sample count | `Index`                            | DPCM sample index       | 0 to `MAX_DSAMPLES - 1`  |                                                                                                            | 1+                         |
 | unsigned int | 4                   | ^                 | `Len`                              | DPCM sample name length | 0 to `MAX_NAME_SIZE - 1` |                                                                                                            | 1+                         |
-| char[]       | `MAX_NAME_SIZE`     | ^                 | `Name`                             | DPCM sample name        | ASCII strings            | actual buffer size is `MAX_NAME_SIZE`, but only gets `Len` amount of bytes written.                        | 1+                         |
+| char\[]      | `MAX_NAME_SIZE`     | ^                 | `Name`                             | DPCM sample name        | ASCII strings            | actual buffer size is `MAX_NAME_SIZE`, but only gets `Len` amount of bytes written.                        | 1+                         |
 | unsigned int | 4                   | ^                 | `Size`                             | DPCM sample size        | 0 to `0x7FFF`'           | size actually must be `(L * 16) + 1` bytes, where L ranges from 0 to 255. the max DPCM size is 4081 bytes. | 1+                         |
-| char[]       | `Size`              | ^                 | `pData`                            | DPCM sample data        |                          |                                                                                                            | 1+                         |
+| char\[]      | `Size`              | ^                 | `pData`                            | DPCM sample data        |                          |                                                                                                            | 1+                         |
 
 #### Notes
 
@@ -735,7 +735,7 @@ Block ID: `COMMENTS`
 | _Data type_  | _Unit size (bytes)_                     | _Repeat_ | _Object/relevant variable in code_ | _Description_                      | _Valid range_ | _Notes_                         | _Present in block version_ |
 | ------------ | --------------------------------------- | -------- | ---------------------------------- | ---------------------------------- | ------------- | ------------------------------- | -------------------------- |
 | unsigned int | 4                                       |          | `m_bDisplayComment`                | Display module comment when opened | 0, 1          | Boolean value stored as integer | 1+                         |
-| char[]       | Length of zero-terminated char[] string |          | `m_strComment`                     | Module comment data.               |               |                                 | 1+                         |
+| char\[]      | Length of zero-terminated char[] string |          | `m_strComment`                     | Module comment data.               |               |                                 | 1+                         |
 
 #### Notes
 
@@ -781,7 +781,7 @@ Alternate block ID: `SEQUENCES_N106`
 | unsigned int | 4                   | ^              | `m_iLoopPoint`                     | Sequence loop point    |                                                                          |                                                                    | 1                          |
 | unsigned int | 4                   | ^              | `m_iReleasePoint`                  | Sequence release point |                                                                          |                                                                    | 1                          |
 | unsigned int | 4                   | ^              | `Settings`                         | Sequence setting       | [`seq_setting_t`](Datatypes%20and%20constants.md#`seq_setting_t`%20enum) |                                                                    | 1                          |
-| char[]       | Sequence item count | ^              | `Value`                            | Sequence data          |                                                                          |                                                                    | 1                          |
+| char\[]      | Sequence item count | ^              | `Value`                            | Sequence data          |                                                                          |                                                                    | 1                          |
 
 #### Notes
 
@@ -801,7 +801,7 @@ Block ID: `SEQUENCES_S5B`
 | unsigned int | 4                   | ^              | `m_iLoopPoint`                     | Sequence loop point    |                                                                          |                                                                    | 1                          |
 | unsigned int | 4                   | ^              | `m_iReleasePoint`                  | Sequence release point |                                                                          |                                                                    | 1                          |
 | unsigned int | 4                   | ^              | `Settings`                         | Sequence setting       | [`seq_setting_t`](Datatypes%20and%20constants.md#`seq_setting_t`%20enum) |                                                                    | 1                          |
-| char[]       | Sequence item count | ^              | `Value`                            | Sequence data          |                                                                          |                                                                    | 1                          |
+| char\[]      | Sequence item count | ^              | `Value`                            | Sequence data          |                                                                          |                                                                    | 1                          |
 
 #### Notes
 
@@ -903,6 +903,27 @@ Block ID: `BOOKMARKS`
 
 Block ID: `JSON`
 
+| _Data type_ | _Unit size (bytes)_                      | _Repeat_ | _Object/relevant variable in code_ | _Description_ | _Valid range_ | _Notes_   | _Present in block version_ |
+| ----------- | ---------------------------------------- | -------- | ---------------------------------- | ------------- | ------------- | --------- | -------------------------- |
+| char\[]     | Length of zero-terminated char\[] string |          |                                    | JSON string   | ASCII string  | JSON data | 1+                         |
+
+#### Notes
+
+- Information is based on `CFamiTrackerDoc::WriteBlock_JSON`
+- Implemented in Dn-FT version j0.0.5.
+- This is JSON data stored as a string.
+- Details can be found in [Dn-FT JSON Optional Settings format](Dn-FT%20JSON%20Optional%20Settings%20format.md)
+
 ### Emulation Parameters block
 
 Block ID: `PARAMS_EMU`
+
+| _Data type_ | _Unit size (bytes)_                      | _Repeat_ | _Object/relevant variable in code_ | _Description_           | _Valid range_ | _Notes_                                                   | _Present in block version_ |
+| ----------- | ---------------------------------------- | -------- | ---------------------------------- | ----------------------- | ------------- | --------------------------------------------------------- | -------------------------- |
+| int         | 4                                        |          | `m_bUseExternalOPLLChip`           | External OPLL chip flag | 0, 1          | Boolean value stored as integer. Not written if not used. | 1+                         |
+| char\[]     | 8                                        | 19       | `m_iOPLLPatchBytes`                | OPLL patch data         | 0 to 255      |                                                           | 1+                         |
+| char\[]     | Length of zero-terminated char\[] string | ^        | `m_strOPLLPatchNames`              | OPLL patch name         |               |                                                           | 1+                         |
+
+#### Notes
+
+- Information is based on `CFamiTrackerDoc::ReadBlock_ParamsEmu`
