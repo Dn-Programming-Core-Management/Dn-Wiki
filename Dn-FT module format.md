@@ -1,7 +1,6 @@
 # Dn-FamiTracker module file (.dnm) format
 
-- Not yet complete!
-- Last updated 2025-07-09
+- Last updated 2025-07-18
 - version 4.50
 
 ---
