@@ -89,7 +89,7 @@
 | **0.5.0 beta 5**     | 4.50 (0x0450)        | 9            | 1          | -            | 4            | 8                 | 6               | 3            | 6              | -           | 1                  | 1              | 6                    | 1                    | 1                   |
 | **0.5.0 beta 10**    | 5.00 (0x0500)        | 10           | 2          | 1            | -            | 9                 | 7               | -            | -              | 1           | 1                  | 1              | 7                    | 1                    | 1                   |
 
-- \* The ability to load `SEQUENCES_S5B` blocks was implemented at least around FamiTracker 0.4.1, but the ability to write them or the UI surrounding them was not implemented until 0.5.0 beta.
+- \*The ability to load `SEQUENCES_S5B` blocks was implemented at least around FamiTracker 0.4.1, but the ability to write them or the complete implementation of 5B audio was not implemented until 0.5.0 beta.
 
 #### Notes
 
@@ -135,15 +135,13 @@
 | **0.3.15.2**          | 4.40 (0x0440)        | 6            | 1          | 3            | 6                 | 6               | 3            | 5              | 1                  | 1              | 6                    | 1                    | 1                   | 2                  | 1                  | 1             | 1               |
 | **0.3.15.3**          | 4.40 (0x0440)        | 6            | 1          | 3            | 6                 | 6               | 3            | 5              | 1                  | 1              | 6                    | 1                    | 1                   | 2                  | 1                  | 1             | 1               |
 
-- \* The ability to load `SEQUENCES_S5B` blocks was implemented at least around FamiTracker v0.4.1, but the ability to write them or the UI surrounding them was not implemented until 0CC-FamiTracker v0.3.5
+- \*The ability to load `SEQUENCES_S5B` blocks was implemented at least around FamiTracker v0.4.1, but the ability to write them or the complete implementation of 5B audio was not implemented until 0CC-FamiTracker v0.3.5
 
 #### Notes
-
 
 - 0CC-FamiTracker is initially forked from FamiTracker v0.4.2.
 - in version 0.3.8, it has been ported to FamiTracker v0.4.6.
 - Beta builds are not counted due to the continuous nature of version control.
-
 
 ## Format overview
 
@@ -645,7 +643,7 @@ Block ID: `SEQUENCES`
 | ------------ | ----------------------- | -------------------------------------------- | ---------------------------------- | --------------------------- | ------------------------------------------------------------------------ | -------------------------------------------------------------------------------------- | -------------------------- |
 | unsigned int | 4                       |                                              | `Count`                            | 2A03 sequence count         | 0 to `MAX_SEQUENCES * SEQ_COUNT`                                         | Only used sequences are counted                                                        | 1+                         |
 | unsigned int | 4                       | Per 2A03 sequence count                      | `Index`                            | Sequence index              | 0 to `MAX_SEQUENCES - 1`                                                 |                                                                                        | 1+                         |
-| unsigned int | 4                       | ^                                            | `Type`                             | Sequence type               | 0 to `SEQ_COUNT - 1`                                                     | See [Sequence type tables](Dn-FT%20module%20format.md#Sequence%20tyoe).                | 2+                         |
+| unsigned int | 4                       | ^                                            | `Type`                             | Sequence type               | 0 to `SEQ_COUNT - 1`                                                     | See [Sequence type tables](Dn-FT%20module%20format.md#Sequence%20type).                | 2+                         |
 | char         | 1                       | ^                                            | `SeqCount`                         | Sequence run count          | 0 to `MAX_SEQUENCES_ITEMS - 1`                                           | `SeqCount` refers to the size of a different sequence scheme.                          | 1-2                        |
 | char[]       | Sequence run count \* 2 | ^                                            | `Value`, `Length`                  | Sequence data, run length-1 |                                                                          | RLE encoded sequence data?                                                             | 1-2                        |
 | char         | 1                       | ^                                            | `m_iItemCount`                     | Sequence item count         | 0 to `MAX_SEQUENCE_ITEMS`                                                | If the sequence count is larger, it clamps to `MAX_SEQUENCE_ITEMS`.                    | 3+                         |
@@ -800,7 +798,7 @@ Block ID: `SEQUENCES_VRC6`
 | ------------ | ----------------------- | --------------------------------------------- | ---------------------------------- | --------------------------- | ------------------------------------------------------------------------ | -------------------------------------------------------------------------------------- | -------------------------- |
 | unsigned int | 4                       |                                               | `Count`                            | Sequence count              | 0 to `MAX_SEQUENCES * SEQ_COUNT`                                         | Only used sequences are counted                                                        | 1+                         |
 | unsigned int | 4                       | Per sequence count                            | `Index`                            | Sequence index              | 0 to `MAX_SEQUENCES - 1`                                                 |                                                                                        | 1+                         |
-| unsigned int | 4                       | ^                                             | `Type`                             | Sequence type               | 0 to `SEQ_COUNT - 1`                                                     | See [Sequence type tables](Dn-FT%20module%20format.md#Sequence%20tyoe).                | 2+                         |
+| unsigned int | 4                       | ^                                             | `Type`                             | Sequence type               | 0 to `SEQ_COUNT - 1`                                                     | See [Sequence type tables](Dn-FT%20module%20format.md#Sequence%20type).                | 2+                         |
 | char         | 1                       | ^                                             | `SeqCount`                         | Sequence run count          | 0 to `MAX_SEQUENCES_ITEMS - 1`                                           | `SeqCount` refers to the size of a different sequence scheme.                          | 1-2                        |
 | char[]       | Sequence run count \* 2 | ^                                             | `Value`, `Length`                  | Sequence data, run length-1 |                                                                          | RLE encoded sequence data?                                                             | 1-2                        |
 | char         | 1                       | ^                                             | `m_iItemCount`                     | Sequence item count         | 0 to `MAX_SEQUENCE_ITEMS`                                                | If the sequence count is larger, it clamps to `MAX_SEQUENCE_ITEMS`.                    | 3+                         |
@@ -878,12 +876,12 @@ Block ID: `PARAMS_EXTRA`
 
 Block ID: `DETUNETABLES`
 
-| _Data type_  | _Unit size (bytes)_          | _Repeat_           | _Object/relevant variable in code_ | _Description_                                  | _Valid range_     | _Notes_                                             | _Present in block version_ |
-| ------------ | ---------------------------- | ------------------ | ---------------------------------- | ---------------------------------------------- | ----------------- | --------------------------------------------------- | -------------------------- |
-| char         | 1                            |                    | `Count`                            | Detune table count                             | 0 to 6            | Each detune table is specific to each tuning table. | 1+                         |
-| char         | 1                            | Detune table count | `Chip`                             | Detune table index                             | 0 to 5            | See Detune table chip index table.                  | 1+                         |
-| char         | Detune table index           | ^                  | `Item`                             |                                                | 0 to `NOTE_COUNT` |                                                     | 1+                         |
-| char, int\[] | 5 \* Detune table note count | ^                  | `Note`, `Offset`                   | Detune table note index and offset tuple array |                   | See table.                                          |                            |
+| _Data type_  | _Unit size (bytes)_          | _Repeat_           | _Object/relevant variable in code_ | _Description_                                  | _Valid range_     | _Notes_                                                                                                        | _Present in block version_ |
+| ------------ | ---------------------------- | ------------------ | ---------------------------------- | ---------------------------------------------- | ----------------- | -------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| char         | 1                            |                    | `Count`                            | Detune table count                             | 0 to 6            | Each detune table is specific to each tuning table.                                                            | 1+                         |
+| char         | 1                            | Detune table count | `Chip`                             | Detune table index                             | 0 to 5            | See Detune table chip index table.                                                                             | 1+                         |
+| char         | Detune table index           | ^                  | `Item`                             |                                                | 0 to `NOTE_COUNT` |                                                                                                                | 1+                         |
+| char, int\[] | 5 \* Detune table note count | ^                  | `Note`, `Offset`                   | Detune table note index and offset tuple array |                   | See [tuple array table](Dn-FT%20module%20format#Detune%20table%20note%20index%20and%20offset%20tuple%20array). |                            |
 
 #### Detune table note index and offset tuple array
 
