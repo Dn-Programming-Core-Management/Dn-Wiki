@@ -373,10 +373,10 @@
 
 ## File Header
 
-| Data type    | Unit size (bytes) | Repeat | Object/relevant variable in code      | Description       | Valid values                                  | Notes                                                                                                     |
-| ------------ | ----------------- | ------ | ------------------------------------- | ----------------- | --------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
-| char\[256]   | 256               |        | `FILE_HEADER_ID`, `FILE_HEADER_ID_DN` | Identifier string | `FamiTracker Module`, `Dn-FamiTracker Module` | In Dn-FT v0.5.0.0, this was changed to `Dn-FamiTracker Module` to avoid collision with FT 0.5.0b modules. |
-| unsigned int | 4                 |        | `m_iFileVersion`                      | Module version    |                                               | Version number is formatted as BCD (ex. 4.50)                                                             |
+| Data type    | Unit size (bytes)                    | Repeat | Object/relevant variable in code      | Description       | Valid values                                  | Notes                                                                                                     |
+| ------------ | ------------------------------------ | ------ | ------------------------------------- | ----------------- | --------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| char\[]      | Length of identifier string (18, 21) |        | `FILE_HEADER_ID`, `FILE_HEADER_ID_DN` | Identifier string | `FamiTracker Module`, `Dn-FamiTracker Module` | In Dn-FT v0.5.0.0, this was changed to `Dn-FamiTracker Module` to avoid collision with FT 0.5.0b modules. |
+| unsigned int | 4                                    |        | `m_iFileVersion`                      | Module version    |                                               | Version number is formatted as BCD (ex. 4.50)                                                             |
 
 ### Notes
 
