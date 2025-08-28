@@ -1,13 +1,13 @@
 # Dn-FamiTracker module file (.dnm) format
 
-- Last updated 2025-07-18
+- Last updated 2025-08-28
 - version 4.50
 
 ---
 
 ## About
 
-- This text aims to document the binary module file format as of Dn-FamiTracker v0.5.1.1.
+- This text aims to document the binary module file format as of Dn-FamiTracker v0.5.2.
 - Each section is declared sequentially as it appears in the file.
 - Unless specified otherwise, all data is stored in **little-endian** format.
 - Strings are stored in **ASCII** encoding unless specified otherwise.
@@ -17,23 +17,23 @@
 
 - This document aims to cover all known versions of the module format of FamiTracker, 0CC-FamiTracker, and Dn-FamiTracker.
 - As such, the information will be very dense and wordy. In order to parse this, you have to keep two things in mind:
-
-### Program version
-
-- Keep in mind the program version for analysis.
-- For example, I want to review the module format of FamiTracker v0.4.0 stable.
-
-### Block version
-
-- After choosing the relevant program version, use the version chart to identify the block versions used.
-- Now, when reading a block format, choose the corresponding row to the version you have in mind.
-- For example, I need to analyze the `INSTRUMENTS` block. Since I have chosen FamiTracker v0.4.0 for my analysis, Its block version is 5.
+	- ***Program version***
+		- Keep in mind the program version for analysis.
+		- For example:
+			- I want to review the module format of *FamiTracker v0.4.0 stable*.
+	- ***Block version***
+		- After choosing the relevant program version, use the version chart to identify the block versions used.
+		- Now, when reading a block format, choose the corresponding row to the version you have in mind.
+		- For example:
+			- I need to analyze the *`INSTRUMENTS` block*.
+			- Since I have chosen FamiTracker v0.4.0 for my analysis, its block version is *5*.
 
 ### Module version
 
 - Sometimes, data formats change depending on module version. For instance, the row index in the [Patterns block](Dn-FT%20module%20format.md#Row%20Data) has a different data type depending on the module version or the block version.
-- The module version doesn't necessarily change in sync with the program version.
-- For example, the module version of FamiTracker v0.4.0 is `0x0430`.
+- The module version *doesn't necessarily change in sync* with the program version.
+	- For example:
+		- The module version of FamiTracker v0.4.0 is `0x0430`.
 
 ### All together now
 
@@ -174,6 +174,7 @@
 | **Dn0.5.0.2**       | 4.50 (0x0450)        | 6            | 1          | 3            | 1*           | 6                 | 6               | 3            | 5              | 1                  | 1              | 6                    | 1                    | 1                   | 2                  | 1                  | 1             | 1               | 1    | 1                |
 | **Dn0.5.1.0**       | 4.50 (0x0450)        | 6            | 1          | 3            | 1*           | 6                 | 6               | 3            | 5              | 1                  | 1              | 6                    | 1                    | 1                   | 2                  | 1                  | 1             | 1               | 1    | 1                |
 | **Dn0.5.1.1**       | 4.50 (0x0450)        | 6            | 1          | 3            | 1*           | 6                 | 6               | 3            | 5              | 1                  | 1              | 6                    | 1                    | 1                   | 2                  | 1                  | 1             | 1               | 1    | 1                |
+| **Dn0.5.2**         | 4.50 (0x0450)        | 6            | 1          | 3            | 1*           | 6                 | 6               | 3            | 5              | 1                  | 1              | 6                    | 1                    | 1                   | 2                  | 1                  | 1             | 1               | 1    | 1                |
 
 #### Notes
 
