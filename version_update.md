@@ -9,7 +9,7 @@
 	- Double check that this tag is higher than the previous release tag
 	- Version tag must be appropriate to Semantic Versioning
 - [ ] Update changelogs:
-	- [CHANGELOG.md](CHANGELOG.md), which will update [../Dn-Help/hlp/changelog_shell.htm](changelog_shell.htm) upon build
+	- [CHANGELOG.md](Dn-Wiki/CHANGELOG.md), which will update [../Dn-Help/hlp/changelog_shell.htm](changelog_shell.htm) upon build
 - [ ] Edit every file with version info:
 	- [Dn-FamiTracker.rc](../Dn-FamiTracker.rc)
 	- [version.h](../version.h)
